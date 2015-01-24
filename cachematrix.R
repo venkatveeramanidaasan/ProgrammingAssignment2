@@ -48,12 +48,14 @@ makeCacheMatrix <- function(mdata = matrix()) {
     cached_solve <- NULL
     
     set <- function(ndata) {
-        mdata <<- ndata
         ## Whenever data changes. We have to invalidate it. 
         ## So, the next call to getSolve will return NULL.
         ## Then, the makeSolve will invoke on solve on new matrix data and 
         ## caches it using setsolve()
-        cached_solve <<- NULL
+        if (!identical(ndata, mdata)) {
+            mdata <<- ndata
+            cached_solve <<- NULL            
+        }
     }
     
     get <- function() {
